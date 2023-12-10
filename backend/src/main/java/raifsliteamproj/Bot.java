@@ -14,12 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 class RaifStatusBot extends TelegramLongPollingBot {
-    public RaifStatusBot(String botToken) {
+    public RaifStatusBot(String botToken, String miniAppUrl) {
         super(botToken);
 		tgBotToken = botToken;
+        this.miniAppUrl = miniAppUrl;
     }
 
     @Override
@@ -27,54 +29,25 @@ class RaifStatusBot extends TelegramLongPollingBot {
         try {
             System.out.println("Processing update");
 
-            String dstChat = null;
             if (update.hasMessage()) {
                 System.out.println("Processing message");
                 var msgIn = update.getMessage();
-                dstChat = Long.toString(msgIn.getChatId());
                 if (!msgIn.hasText()) {
-                    sendError(dstChat, "Incomding message is empty");
+                    sendError("Incoming message is empty", msgIn.getChatId());
                     System.out.println("Incoming message is empty");
                     return;
                 }
-                if (!msgIn.getText().equals("/reset")) {
+                if (!msgIn.getText().equals("/start")) {
                     System.out.println("received unknown method " + msgIn.getText());
-                    sendError("Only /reset supported", dstChat);
+                    sendError("Only /start supported", msgIn.getChatId());
                     return;
                 }
-                counter = 0;
-            } else if (update.hasCallbackQuery()) {
-                System.out.println("Processing callback");
-                var query = update.getCallbackQuery();
-                String data = update.getCallbackQuery().getData();
-                if (data != BTN_DATA) {
-                    sendError("button data mismatch", query.getChatInstance());
-                    System.out.println("button data mismatch");
-                    return;
-                }
-                counter++;
+                sendStartMiniAppButton(msgIn.getChatId());
             }
-            SendMessage messageToSend = new SendMessage();
-            messageToSend.setText("Here is your button");
-
-            messageToSend.setChatId(dstChat);
-            var ikm = new InlineKeyboardMarkup();
-            var ikb = new InlineKeyboardButton();
-            ikb.setText("clickme(" + counter + ")");
-            ikb.setCallbackData(BTN_DATA);
-            var row = new ArrayList<InlineKeyboardButton>();
-            List<List<InlineKeyboardButton>> rows = new ArrayList<List<InlineKeyboardButton>>();
-            row.add(ikb);
-            rows.add(row);
-            ikm.setKeyboard(rows);
-            messageToSend.setReplyMarkup(ikm);
-
-            System.out.println("Sending new button");
-            execute(messageToSend);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
@@ -98,7 +71,28 @@ class RaifStatusBot extends TelegramLongPollingBot {
         execute(msg);
     }
 
-    private int counter = 0;
-    private static final String BTN_DATA = "btn_data";
+    private void sendStartMiniAppButton(long chatId) {
+        var miniAppInfo = new WebAppInfo(this.miniAppUrl);
+        var inlineButton = new InlineKeyboardButton("Open Mini App");
+        inlineButton.setWebApp(miniAppInfo);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>(1);
+        keyboard.add(new ArrayList<>());
+        keyboard.getFirst().add(inlineButton);
+
+        var message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Go!");
+        message.setReplyMarkup(new InlineKeyboardMarkup(keyboard));
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            System.out.println("Failed to send start mini app button");
+            e.printStackTrace(System.out);
+        }
+    }
+
 	private final String tgBotToken;
+    private final String miniAppUrl;
 }
