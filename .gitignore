@@ -3,3 +3,9 @@
 
 # Maven output
 target/
+
+# Built bundle files
+/dist/
+
+# JS external packages
+node_modules/
