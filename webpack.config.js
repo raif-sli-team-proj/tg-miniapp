@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
     entry: './app/index.jsx',
     output: {
-        filename: 'main.js',
+        filename: 'miniapp.js',
         path: path.resolve(__dirname, 'dist'),
     },
     module: {
@@ -18,5 +18,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['.jsx', '.ts', '.js'],
+    },
+    devtool: 'inline-source-map',
+    devServer: {
+        static: "./dist",
+        port: 9000,
     },
 };
