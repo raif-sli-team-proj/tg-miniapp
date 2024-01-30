@@ -40,6 +40,13 @@ export async function retriveCurrentStatus(serviceName) {
     return ServiceStatus.Down;
 }
 
+export async function retrieveLastIncident(serviceName) {
+    return await new Promise(async function(resolve) {
+        await new Promise(r => setTimeout(r, 2000));
+        resolve(new Incident(serviceName, new Date(2024, 0, 1), 10, ServiceStatus.Down, "Hardcoded"));
+    });
+}
+
 async function retrieveStatuses() {
     const request_url = config.api_gateway_url_base + '/api/v1/status';
 
