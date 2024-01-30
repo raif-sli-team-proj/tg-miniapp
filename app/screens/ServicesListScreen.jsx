@@ -1,8 +1,8 @@
 import React from "react";
 
-import Heading from "../components/Heading";
 import Service from "../components/Service";
 import ServiceInfo from "../services/Service";
+import Header from "../components/Header";
 
 export default function ServicesListScreen({onSelectService}) {
 
@@ -17,10 +17,11 @@ export default function ServicesListScreen({onSelectService}) {
         onSelectService(serviceName);
     };
     return (
-        <div className="m-left-5 m-right-5">
-            <Heading>Сервисы RaifPay</Heading>
-            <hr />
-            {services.map(item => <Service key={item.name} service={item} onServiceClick={handleServiceClick}/>)}
-        </div>
+        <>
+            <Header screenName={"Сервисы RaifPay"}/>
+            <div className="Main">
+                {services.map(item => <Service key={item.name} service={item} onServiceClick={handleServiceClick}/>)}
+            </div>
+        </>
     );
 }
