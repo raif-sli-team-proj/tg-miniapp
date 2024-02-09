@@ -1,6 +1,6 @@
 import config from "../config.js";
 import Incident, { IncidentStatus } from "./Incident.js";
-import { ServiceStatus } from "./Service.js"
+import ServiceInfo, { ServiceStatus } from "./Service.js"
 
 // FIXME: serviceName must be service id (i.e. "QRC" instead of "Регистарция QR")
 export async function retrieveIncidents(serviceName) {
@@ -52,4 +52,35 @@ async function retrieveStatuses() {
 
     const response = await fetch(request_url);
     return await response.json();
+}
+
+export function retreiveSli(serviceName, resolve) {
+    setTimeout(() => {
+        resolve({serviceName, sli: 99.95});
+    }, 2000);
+}
+
+export async function retrieveServicesStatuses(services) {
+    return new Promise(async (resolve) => {
+        const allServiceStatuses = await retrieveStatuses();
+        const result = [];
+        for (let serviceStatus of allServiceStatuses) {
+            // Array `services` has small chances to become larger than 20 elements, so linear search is fast enough or even faster then anything else here.
+            if (undefined === services.find((it) => it === serviceStatus.serviceName))
+                continue;
+
+            const srv = {
+                name: serviceStatus.serviceName,
+                sli:serviceStatus.sli ?? 99.95,
+                status: ServiceStatus.Problems,
+                lastIncident: {
+                    date: "2024-01-01T013:00:00.00+00:00",
+                    description: "",
+                    status: "FIXED"
+                }
+            };
+            result.push(srv);
+        }
+        resolve(result);
+    });
 }

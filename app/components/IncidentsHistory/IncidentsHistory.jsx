@@ -1,23 +1,22 @@
 import React, {useState} from "react";
 
-import Date from "./Date.jsx";
-import { Heading2 } from "./Headings.jsx";
-import { retrieveIncidents } from "../services/IncidentsHistory.js";
-import Row from "./Row.jsx"
-import StatusText from "./StatusText.jsx";
+import Date from "../Date.jsx";
+import { Heading2 } from "../Headings.jsx";
+import { retrieveIncidents } from "../../services/api";
+import Row from "../Row.jsx"
+import StatusText from "../StatusText.jsx";
+import useStyles from "./style";
 
-export default function IncidentsHistory({serviceName}) {
+export default function IncidentsHistory({serviceName, className}) {
     const [incidents, setIncidents] = useState(null);
     if (incidents === null) {
         retrieveIncidents(serviceName).then((incidents) => {
             setIncidents(incidents);
         })
     }
-    const style = {
-        "padding-top": "16px"
-    };
+    const styles = useStyles();
     return (
-        <div className="IncidentsHistory" style={style}>
+        <div className={className + ' ' + styles.incidentsHistory}>
             <Heading2>История инцидентов</Heading2>
             {(incidents
                 ? <>{incidents.map(item => <Incident key={item.date} incident={item}/>)}</>

@@ -2,7 +2,9 @@ import React, {useState} from "react";
 
 import ServiceInfo from "./services/Service";
 import ServiceScreen from "./screens/ServiceScreen";
-import ServicesListScreen from "./screens/ServicesListScreen";
+import ServicesListScreen from "./screens/ServicesListScreen/ServicesListScreen";
+import { ThemeProvider } from "react-jss";
+
 
 export function MiniApp() {
     const [screen, selectScreen] = useState({
@@ -15,16 +17,21 @@ export function MiniApp() {
         "ServiceScreen": ServiceScreen,
     };
 
-    if (screen.name === "ServicesListScreen") {
-        const handleSelectService = (serviceName) => {
-            const srv = new ServiceInfo(serviceName);
-            selectScreen({name: "ServiceScreen", props: {service: srv}});
-        };
-        return <ServicesListScreen {...screen.props} onSelectService={handleSelectService}/>
-    } else if (screen.name == "ServiceScreen") {
-        const handleReturn = () => { selectScreen({name: "ServicesListScreen", props: null}); }
-        return <ServiceScreen {...screen.props} onReturn={handleReturn}/>
-    } else {
-        <h1>Routing error {screen.name} is unknown screen.</h1>
+    const goToServiceScreen = serviceName => {
+        const srv = new ServiceInfo(serviceName);
+        selectScreen({name: "ServiceScreen", props: {service: srv}});
     }
+
+    const goToServiceListScreen = () => {
+        selectScreen({name: "ServicesListScreen", props: null});
+    };
+
+    const theme = {}
+
+    return (
+        <ThemeProvider theme={theme}>
+            {screen.name === "ServicesListScreen" && <ServicesListScreen {...screen.props} onSelectService={goToServiceScreen} />}
+            {screen.name === "ServiceScreen" && <ServiceScreen {...screen.props} onReturn={goToServiceListScreen}/>}
+        </ThemeProvider>
+    )
 }

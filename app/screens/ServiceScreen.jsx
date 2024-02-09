@@ -1,6 +1,6 @@
 import React from "react";
 
-import IncidentsHistory from "../components/IncidentsHistory.jsx";
+import IncidentsHistory from "../components/IncidentsHistory/IncidentsHistory.jsx";
 import Header from "../components/Header.jsx";
 
 export default function ServiceScreen({service, onReturn}) {
