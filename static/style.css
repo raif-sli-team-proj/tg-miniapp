@@ -6,6 +6,7 @@
     font-family: 'Roboto';
     font-size: 16px;
     font-weight: 500;
+    box-sizing: border-box;
 }
 
 #root {
@@ -18,19 +19,29 @@
 .Main {
     margin: 0;
     padding: 0 20px;
-    height: calc(100vh - 50px);
-    -ms-overflow-style: none;  /* Make scrollbar invisible in IE and Edge */
-    scrollbar-width: none;  /* Make scrollbar invisible in Firefox */
+    /* height: calc(100vh - 50px); */
+    height: 100%;
     overflow-y: scroll;
 }
 
-.Main::-webkit-scrollbar {
+.screen-content {
+    margin: 0;
+    padding: 0 20px;
+}
+
+.scroll-invisible {
+    -ms-overflow-style: none;  /* Make scrollbar invisible in IE and Edge */
+    scrollbar-width: none;  /* Make scrollbar invisible in Firefox */
+}
+
+.scroll-invisible::-webkit-scrollbar {
     display: none;  /* Make scrollbar invisible in Chrome, Safari and Opera*/
 }
 
 .header {
     box-shadow: 0 -4px 10px;
     height: 50px;
+    min-height: 50px;
 }
 
 .h-100 {

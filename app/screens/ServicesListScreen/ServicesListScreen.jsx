@@ -34,7 +34,7 @@ export default function ServicesListScreen({onSelectService}) {
     return (
         <>
             <Header screenName={"Сервисы RaifPay"}/>
-            <div className="Main">
+            <div className="Main scroll-invisible">
                 <div className={styles.ServicesListScreen}>
                     {config.services.map(srvName => statuses.items[srvName] && <ServiceQuickInfoCard className="service-card" key={srvName} service={ServiceInfo.fromJson(statuses.items[srvName])} onServiceClick={handleServiceClick}/>)}
                 </div>
