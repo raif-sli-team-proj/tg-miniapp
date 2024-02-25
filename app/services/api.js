@@ -126,3 +126,32 @@ function retrieveFakeSliData(frameSize) {
         ]
     }
 }
+
+export async function updateNotificationSettings(settings) {
+    const request_url = config.api_gateway_url_base + '/api/v1/subscribe';
+    let rsp = await fetch(request_url, {
+        body: settings,
+        method: "POST"
+    });
+    if (!rsp.ok) {
+        console.error("Updating notification settings failed: " + rsp.status);
+        return false;
+    }
+    return true;
+}
+
+export async function retrieveNotificationSettings() {
+    const request_url = config.api_gateway_url_base = '/api/v1/subscribe';
+    let rsp = await fetch(request_url);
+    if (!rsp.ok) {
+        console.error("Failed to fetch current notification settings: " + rsp.status);
+        return {};
+    }
+    try {
+        let settings = await rsp.json();
+        return { settings };
+    } catch(error) {
+        console.error(error);
+        return { error };
+    }
+}

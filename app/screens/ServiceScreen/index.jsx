@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 import IncidentsHistory from "../../components/IncidentsHistory/IncidentsHistory.jsx";
-import Header from "../../components/Header.jsx";
+import Header from "../../components/Header";
 import BottomMenu from "../../components/BottomMenu/BottomMenu.jsx";
 import useStyles from "./style.js";
 import IncidentIcon512 from "../../svg/IncidentIcon512.jsx";

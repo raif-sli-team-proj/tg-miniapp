@@ -6,16 +6,11 @@ import ProblemsIcon from "../svg/ProblemsIcon";
 import { ServiceStatus } from "../services/Service";
 
 export default function ServiceStatusIcon({status}) {
-    const size = {
-        width: "40px",
-        height: "40px",
-    };
-
     if (status === ServiceStatus.Up) {
-        return <OkIcon {...size} />;
+        return <OkIcon />;
     } else if (status === ServiceStatus.Problems) {
-        return <ProblemsIcon {...size} />;
+        return <ProblemsIcon />;
     } else {
-        return <DownIcon {...size} />;
+        return <DownIcon />;
     }
 }

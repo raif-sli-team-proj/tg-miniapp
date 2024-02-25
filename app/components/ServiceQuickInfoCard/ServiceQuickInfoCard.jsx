@@ -5,6 +5,7 @@ import { Heading2 } from "../Headings";
 import Row from "../Row";
 import ServiceStatusIcon from "../ServiceStatusIcon";
 import useStyles from "./style";
+import ShortText from "../ShortText"
 
 /**
  * service is instance of ServiceInfo
@@ -19,11 +20,11 @@ export default function ServiceQuickInfoCard({service, onServiceClick, className
 
     return (
         <div className={className + " " + styles.ServiceQuickInfoCard} onClick={handleClick}>
-            <Row>
+            <Row className="row">
                 <Column>
                     <Heading2>{service.name}</Heading2>
-                    {service.sli != null && <div>SLI<span>95</span>: {service.sli}</div>}
-                    {service.lastIncident && <div className="no-incidents">0 дней без инцидентов</div>}
+                    {service.sli != null && <ShortText className="sli">SLI<span>95</span>: {service.sli}</ShortText>}
+                    {service.lastIncident && <ShortText><span className="no-incidents">0 дней без инцидентов</span></ShortText>}
                 </Column>
                 <ServiceStatusIcon status={service.status}/>
             </Row>

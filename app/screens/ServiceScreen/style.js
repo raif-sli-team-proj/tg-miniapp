@@ -17,11 +17,6 @@ const useStyles = createUseStyles({
                 position: "absolute",
             }
         },
-        "& svg": {
-            width: "40px",
-            height: "40px",
-            margin: "0 auto",
-        }
     }
 });
 

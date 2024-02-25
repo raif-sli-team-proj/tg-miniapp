@@ -1,7 +1,7 @@
 import React from "react";
 
 import { IncidentStatus } from "../services/Incident"
-import Row from "./Row";
+import ShortText from "./ShortText";
 
 const statusToText = {
     [IncidentStatus.Fixed]: "исправлено",
@@ -10,8 +10,9 @@ const statusToText = {
 
 export default function StatusText({status}) {
     return (
-        <div className="m-top-1 m-bot-1">
-            <Row>Статус:<div className="m-left-1">{statusToText[status]}</div></Row>
-        </div>
+        <ShortText>{"Статус: " + statusToText[status]}</ShortText>
+        // <div className="m-top-1 m-bot-1">
+        //     <Row>Статус:<div className="m-left-1">{statusToText[status]}</div></Row>
+        // </div>
     )
 }

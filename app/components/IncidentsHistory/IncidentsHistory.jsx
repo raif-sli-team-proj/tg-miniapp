@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 
-import Date from "../Date.jsx";
-import { Heading2 } from "../Headings.jsx";
+import { Heading2 } from "../Headings";
 import { retrieveIncidents } from "../../services/api";
-import Row from "../Row.jsx"
 import StatusText from "../StatusText.jsx";
+import ShortText from "../ShortText";
+import Column from "../Column.jsx";
 import useStyles from "./style";
 
 export default function IncidentsHistory({serviceName, className}) {
@@ -28,13 +28,11 @@ export default function IncidentsHistory({serviceName, className}) {
 
 function Incident({incident}) {
     return (
-        <div className="m-top-2">
+        <Column className="m-top-2">
             <Heading2>{incident.name}</Heading2>
-            {incident.duration && <div className="fs-22">{incident.duration} мин</div> }
+            {incident.duration && <ShortText>{incident.duration + " мин"}</ShortText> }
             <StatusText status={incident.status}/>
-            <Row className="fs-16">
-                <Date date={incident.date}/>
-            </Row>
-        </div>
+            <ShortText>{"Дата: " + incident.date.toLocaleDateString()}</ShortText>
+        </Column>
     );
 }

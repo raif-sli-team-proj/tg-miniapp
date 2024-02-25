@@ -3,6 +3,7 @@ import { createUseStyles } from "react-jss";
 const useStyle = createUseStyles({
     BootomMenu: {
         display: "flex",
+        alignItems: "stretch",
         // boxSizing: "border-box",
         width: "100%",
         minHeight: "2em",
@@ -16,6 +17,25 @@ const useStyle = createUseStyles({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            "@media (min-height: 0px)": {
+                height: "35px",
+            },
+
+            "@media (min-height: 670px)": {
+                height: "48px"
+            },
+
+            "@media (min-height: 1000px)": {
+                height: "77px"
+            },
+
+            "@media (min-height: 1500px)": {
+                height: "100px",
+            },
+
+            "@media (min-height: 2100px)": {
+                height: "125px",
+            },
         },
         "& :first-child": {
             borderLeftWidth: "0"
@@ -25,8 +45,12 @@ const useStyle = createUseStyles({
         },
         "& .selected-item": {
             backgroundColor: "#aaa",
-        }
-    }
+        },
+        "& svg": {
+            margin: "0 auto",
+            height: "100%",
+        },
+    },
 });
 
 export default useStyle;

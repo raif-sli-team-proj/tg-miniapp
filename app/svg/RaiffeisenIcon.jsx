@@ -2,9 +2,9 @@ import React from "react";
 
 {/* <svg width="114" height="32" viewBox="0 0 114 32" fill="none" xmlns="http://www.w3.org/2000/svg"> */}
 
-export default function RaiffeisenIcon({width, height}) {
+export default function RaiffeisenIcon({className}) {
     return (
-        <svg width={width} height={height} viewBox="0 0 32 32" style={{"display": "block"}} fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} viewBox="0 0 32 32" style={{"display": "block"}} fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M32 25.952C32 29.84 29.84 32 25.952 32H6.048C2.16 32 0 29.84 0 25.952V6.048C0 2.16 2.16 0 6.048 0H25.96C29.84 0 32 2.16 32 6.048V25.952Z" fill="#FEE600">
             </path>
             <path d="M20.5763 14.4399V11.3839L21.6803 10.2799V12.9279L22.6403 13.8879L26.5043 10.0239L27.4563 10.9759C27.4483 10.2559 27.3043 8.16792 25.5363 6.43192C23.6323 4.59192 21.5683 5.42392 20.8643 6.12792L17.0083 9.98392L17.9923 10.9679L16.0003 12.9759L14.0083 10.9839L14.9923 9.99992L11.1363 6.14392C10.4323 5.43992 8.36828 4.60792 6.46428 6.44792C4.69628 8.18392 4.55228 10.2719 4.54428 10.9919L5.49628 10.0399L9.36028 13.9039L10.3203 12.9439V10.2959L11.4243 11.3999V14.4559L12.9763 15.9999L5.32828 23.6479L8.35228 26.6639L16.0003 19.0239L23.6483 26.6719L26.6723 23.6559L19.0243 15.9999L20.5763 14.4399Z" fill="#2B2D33">

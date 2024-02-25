@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function DownIcon({width, height}) {
+export default function DownIcon() {
     return (
-    <svg width={width} height={height} viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <title>cross</title>
         <desc>Created with Sketch Beta.</desc>
         <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
