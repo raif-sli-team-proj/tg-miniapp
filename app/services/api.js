@@ -1,20 +1,20 @@
 import config from "../config.js";
-import Incident, { IncidentStatus } from "./Incident.js";
-import ServiceInfo, { ServiceStatus } from "./Service.js"
+import Incident from "./Incident.js";
+import { ServiceStatus } from "./Service.js"
 
-// FIXME: serviceName must be service id (i.e. "QRC" instead of "Регистарция QR")
-export async function retrieveIncidents(serviceName) {
-    const servicesStatuses = await retrieveStatuses();
-    const result = [];
-    for (const serviceEvents of servicesStatuses) {
-        if (serviceEvents.serviceName !== serviceName) {
-            continue;
-        }
-        for (const event of serviceEvents.statuses.slice(-10)) {
-            result.push(new Incident(serviceName, new Date(event.eventDate), 1, IncidentStatus.Fixed, event.status));
-        }
+// FIXME: serviceName must be service id (i.e. "QRC" instead of "Регистарция QR" and also must not be unused parameter)
+export async function retrieveIncidents(serviceName, pageNumber = 0) {
+    const request_url = config.api_gateway_url_base + `/api/v1/incident/${pageNumber}/${config.incidents_page_size}`;
+    const response = await fetch(request_url);
+    if (!response.ok) {
+        const result = {
+            error: `Failed to fetch incidents page#${pageNumber}, status_code=${response.status_code}`
+        };
+        return result;
     }
-    result.reverse();
+    const result = {
+        incidents: await response.json()
+    };
     return result;
 }
 
@@ -54,12 +54,6 @@ async function retrieveStatuses() {
     return await response.json();
 }
 
-export function retreiveSli(serviceName, resolve) {
-    setTimeout(() => {
-        resolve({serviceName, sli: 99.95});
-    }, 2000);
-}
-
 export async function retrieveServicesStatuses(services) {
     return new Promise(async (resolve) => {
         const allServiceStatuses = await retrieveStatuses();
@@ -71,7 +65,7 @@ export async function retrieveServicesStatuses(services) {
 
             const srv = {
                 name: serviceStatus.serviceName,
-                sli: serviceStatus.sli ?? 99.95,
+                sli: serviceStatus.sli,
                 status: ServiceStatus.Problems,
                 lastIncident: {
                     date: "2024-01-01T013:00:00.00+00:00",
@@ -86,26 +80,36 @@ export async function retrieveServicesStatuses(services) {
 }
 
 export async function retrieveSli(serviceName, timeFrame) {
+    const request_url = config.api_gateway_url_base + `/api/v1/sli/${serviceName}?frame=${timeFrame}`;
     return new Promise(async (resolve) => {
-        // const request_url = config.api_gateway_url_base + `/api/v1/sli/hardcode?frame=${timeFrame}`;
-        // const response = await fetch(request_url);
-        // if (!response.ok) {
-        //     const result = {
-        //         serviceName,
-        //         error: {
-        //             time: new Date().valueOf(),
-        //         }
-        //     }
-        //     resolve(result);
-        //     return;
-        // }
-        // const rspJson = await response.json();
-        const rspJson = retrieveFakeSliData(timeFrame);
+        const response = await fetch(request_url);
+        if (!response.ok) {
+            const result = {
+                serviceName,
+                error: `Failed to retrieve sli of ${serviceName}, status_code=${response.status_code}`
+            }
+            resolve(result);
+            return;
+        }
+
+        let rspJson = {};
+        try {
+            rspJson = await response.json();
+        } catch (e) {
+            const result = {
+                serviceName,
+                error: "Unexpected error during parsing sli response body: " + e
+            };
+            resolve(result);
+            return;
+        }
+
         rspJson.serviceName = serviceName;
         resolve(rspJson);
     });
 }
 
+/*
 function retrieveFakeSliData(frameSize) {
     return {
         frameSize,
@@ -126,6 +130,7 @@ function retrieveFakeSliData(frameSize) {
         ]
     }
 }
+*/
 
 export async function updateNotificationSettings(settings) {
     const request_url = config.api_gateway_url_base + '/api/v1/subscribe';

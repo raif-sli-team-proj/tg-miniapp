@@ -35,7 +35,9 @@ export default function SliChart({serviceName}) {
 
     if (needFecthNewData(sli)) {
         dispatch(sliRequested());
-        retrieveSli(serviceName, timeFrame).then(value => dispatch(sliFetched(value)));
+        retrieveSli(serviceName, timeFrame).then(
+            value => dispatch(sliFetched(value))
+        );
     }
     const sliItems = sli.items[serviceName][timeFrame];
 

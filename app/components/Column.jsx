@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Column({children}) {
+export default function Column({children, className}) {
     const style = {
         display: "flex",
         justifyContent: "center",
@@ -8,8 +8,9 @@ export default function Column({children}) {
         alignItems: "start",
         flexDirection: "column"
     };
+    className = className ?? "";
     return (
-        <div className="no-margin" style={style}>
+        <div className={"no-margin " + className} style={style}>
             {children}
         </div>
     );

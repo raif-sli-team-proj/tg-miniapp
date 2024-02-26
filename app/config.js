@@ -8,5 +8,11 @@ config.services = [
     'Внесение ДС',
     'Управление чеками',
 ];
+config.serviceNames = [
+    "QRC",
+    "MRI",
+    "PYI",
+];
+config.incidents_page_size = 20;
 
 export default config;

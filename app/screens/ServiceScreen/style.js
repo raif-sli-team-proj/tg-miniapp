@@ -10,12 +10,11 @@ const useStyles = createUseStyles({
             flex: "0 0 content",
         },
         "& .scrolable-content": {
-            flex: "1 0 auto",
-            position: "relative",
+            alignItems: "stretch",
+            flex: "1 0 200px",
+            display: "flex",
             overflow: "scroll",
-            "& >div": {
-                position: "absolute",
-            }
+            flexDirection: "column",
         },
     }
 });
