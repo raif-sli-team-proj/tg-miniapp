@@ -67,12 +67,14 @@ function Comment({comment}) {
 function CommentInput({incidentId, doAddNewComment}) {
     const inputId = "input-comment-" + incidentId;
     const onSendClicked = () => {
-        const text = document.getElementById(inputId).value;
+        const el = document.getElementById(inputId)
+        const text = el.value;
+        el.value = "";
         doAddNewComment(text);
     };
     return (
         <div className="comment-input" onClick={e => e.stopPropagation()}>
-            <input id={inputId} type="text"/>
+            <input id={inputId} type="text" placeholder="Напишите комментарий"/>
             <button onClick={onSendClicked}><SendIcon/></button>
         </div>
     );
