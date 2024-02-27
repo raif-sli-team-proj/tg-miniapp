@@ -14,5 +14,6 @@ config.serviceNames = [
     "PYI",
 ];
 config.incidents_page_size = 20;
+config.failed_request_retry_period = 10;  // in seconds
 
 export default config;

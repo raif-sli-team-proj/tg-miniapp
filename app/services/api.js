@@ -146,7 +146,7 @@ export async function updateNotificationSettings(settings) {
 }
 
 export async function retrieveNotificationSettings() {
-    const request_url = config.api_gateway_url_base = '/api/v1/subscribe';
+    const request_url = config.api_gateway_url_base + '/api/v1/subscribe';
     let rsp = await fetch(request_url);
     if (!rsp.ok) {
         console.error("Failed to fetch current notification settings: " + rsp.status);
@@ -158,5 +158,28 @@ export async function retrieveNotificationSettings() {
     } catch(error) {
         console.error(error);
         return { error };
+    }
+}
+
+export async function retrieveComments(serviceId, incidentId) {
+    const request_url = config.api_gateway_url_base + `/api/v1/comment/${incidentId}`;
+    let rsp = await fetch(request_url);
+    if (!rsp.ok) {
+        const result = {
+            serviceId,
+            incidentId,
+            error: `Fetch comment for incident ${serviceId}#${incidentId} failed, status_code=${rsp.status_code}`
+        };
+        return result;
+    }
+    try {
+        return {
+            serviceId,
+            incidentId,
+            comments: await rsp.json()
+        };
+    } catch (error) {
+        console.error(error);
+        return { serviceName, incidentId, error };
     }
 }

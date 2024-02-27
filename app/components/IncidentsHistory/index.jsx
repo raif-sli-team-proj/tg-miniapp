@@ -28,7 +28,7 @@ export default function IncidentsHistory({serviceName, className}) {
         <div className={className + ' ' + styles.incidentsHistory}>
             <Heading2>История инцидентов</Heading2>
             {(incidents
-                ? <>{incidents.map(item => <IncidentCard key={item.incidentId} incident={item}/>)}</>
+                ? <>{incidents.toReversed().map(item => <IncidentCard key={item.incidentId} incident={item}/>)}</>
                 : <p>Loading...</p>
             )}
         </div>

@@ -10,6 +10,8 @@ const useStyles = createUseStyles((theme) => ({
         borderRadius: "10px",
         margin: "1% 0",
         padding: "1%",
+        display: "flex",
+        flexDirection: "column",
         "&.status-FIXED": {
             boxShadow: "2px 2px 5px rgb(94, 209, 182)",
         },

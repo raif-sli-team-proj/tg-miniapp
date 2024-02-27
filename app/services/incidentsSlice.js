@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import config from '../config';
 import { ApiRequestStatus } from './slicesBase';
+import { removeDuplicates } from '../utils';
 
 /*
 Single incident from API:
@@ -45,29 +46,16 @@ function buildInitialState(config) {
     return incidents;
 }
 
-// Modifies input array
-function removeDuplicatedIncidents(incidents) {
-    const result = incidents.slice();
-    result.sort((a, b) => {
-        const timestampA = Date.parse(a.incidentStartTime);
-        const timestampB = Date.parse(b.incidentStartTime);
-        return timestampA - timestampB;
-    });
-    return result.filter((val, index, tmp) => {
-        if (index === 0)
-            return true;
-        const timestampCur = Date.parse(val.incidentStartTime);
-        const timestampPrev = Date.parse(tmp[index - 1].incidentStartTime);
-        return timestampCur != timestampPrev;
-    });
-}
-
 function addNewIncidentsToState(state, incidents) {
     for (let incident of incidents) {
         state.items[incident.serviceName].push(incident);
     }
     Object.keys(state.items).forEach((key) => {
-        state.items[key] = removeDuplicatedIncidents(state.items[key]);
+        state.items[key] = removeDuplicates(state.items[key], (a, b) => {
+            const timestampA = Date.parse(a.incidentStartTime);
+            const timestampB = Date.parse(b.incidentStartTime);
+            return timestampA - timestampB;
+        });
     });
 }
 

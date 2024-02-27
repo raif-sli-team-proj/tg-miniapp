@@ -3,6 +3,7 @@ import statusesReducer from "./services/statusesSlice";
 import sliReducer from "./services/sliSlice";
 import notificationsSettingsReducer from "./services/notificationsSettingsSlice";
 import incidentsReducer from "./services/incidentsSlice";
+import commentsReducer from "./services/commentsSlice";
 
 export default configureStore({
     reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
         sli: sliReducer,
         notificationSettings: notificationsSettingsReducer,
         incidents: incidentsReducer,
+        comments: commentsReducer,
     },
 })
