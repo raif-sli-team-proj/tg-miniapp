@@ -6,7 +6,8 @@ import useStyles from "./style.js";
 import { useDispatch, useSelector } from "react-redux";
 import { commentsFetched, commentsRequested, getAvailableComments, getRequestStatus } from "../../services/commentsSlice.js";
 import { ApiRequestStatus } from "../../services/slicesBase.js";
-import { retrieveComments } from "../../services/api.js";
+import { addNewComment, retrieveComments } from "../../services/api.js";
+import SendIcon from "../../svg/SendIcon.jsx";
 
 export default function IncidentCard({incident}) {
     const styles = useStyles();
@@ -14,14 +15,29 @@ export default function IncidentCard({incident}) {
     const dispatch = useDispatch();
     const [isExpanded, setIsExpanded] = useState(false);
 
+
+    const requestComments = () => {
+        dispatch(commentsRequested({serviceId: incident.serviceId, incidentId: incident.incidentId}));
+        retrieveComments(incident.serviceId, incident.incidentId).then(
+            result => dispatch(commentsFetched(result))
+        );
+    };
+
     useEffect(() => {
         if (getRequestStatus(commentsSlice, incident.serviceId, incident.incidentId) == ApiRequestStatus.Initial) {
-            dispatch(commentsRequested({serviceId: incident.serviceId, incidentId: incident.incidentId}));
-            retrieveComments(incident.serviceId, incident.incidentId).then(
-                result => dispatch(commentsFetched(result))
-            );
+            requestComments();
         }
     });
+
+    const doAddNewComment = (text) => {
+        const username = (window.Telegram == null) ? "fake" : window.Telegram.WebApp.initDataUnsafe.user.username;
+        addNewComment(username, text, incident.incidentId, "REPORTED").then(
+            success => {
+                if (success)
+                    requestComments();
+            }
+        );
+    };
 
     let comments = [];
     if (isExpanded) {
@@ -35,16 +51,29 @@ export default function IncidentCard({incident}) {
             <ShortText>{"Статус: " + incident.statusName}</ShortText>
             <ShortText>{"Дата: " + incident.dateTime.toLocaleDateString() + " " + incident.dateTime.toLocaleTimeString()}</ShortText>
             {comments.map(item => <div key={item.id}><Comment comment={item}/></div>)}
+            {isExpanded && <CommentInput incidentId={incident.incidentId} doAddNewComment={doAddNewComment}/>}
         </div>
     );
 }
 
 function Comment({comment}) {
-    console.log(`comment#${comment.id}  ${JSON.stringify(comment)}`);
     return (
         <Column>
-            {/* <ShortText>{comment.StatusName}</ShortText> */}
             <ShortText>{comment.contents}</ShortText>
         </Column>
     )
+}
+
+function CommentInput({incidentId, doAddNewComment}) {
+    const inputId = "input-comment-" + incidentId;
+    const onSendClicked = () => {
+        const text = document.getElementById(inputId).value;
+        doAddNewComment(text);
+    };
+    return (
+        <div className="comment-input" onClick={e => e.stopPropagation()}>
+            <input id={inputId} type="text"/>
+            <button onClick={onSendClicked}><SendIcon/></button>
+        </div>
+    );
 }

@@ -183,3 +183,24 @@ export async function retrieveComments(serviceId, incidentId) {
         return { serviceName, incidentId, error };
     }
 }
+
+export async function addNewComment(userName, text, incidentId, newIncidentStatus) {
+    const request_url = config.api_gateway_url_base + '/api/v1/comment';
+    const response = await fetch(request_url, {
+        body: JSON.stringify({
+            userId: userName,
+            contents: text,
+            incidentId,
+            newIncidentStatus
+        }),
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        console.error("Failed to add new comment");
+        return false;
+    }
+    return true;
+}
