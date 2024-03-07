@@ -204,3 +204,35 @@ export async function addNewComment(userName, text, incidentId, newIncidentStatu
     }
     return true;
 }
+
+// username and telegramChatId
+export async function subscribeToNotifications({username, telegramChatId}) {
+    const request_url = config.api_gateway_url_base + '/api/v1/subscription';
+    const requestBody = {};
+    if (username != null) {
+        requestBody["userId"] = username;
+    }
+    if (telegramChatId != null) {
+        requestBody["telegramChatId"] = telegramChatId;
+    }
+
+    const response = await fetch(request_url, {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        console.error("Failed to subscribe");
+        return {
+            error: "Subscribe failed. HTTP status code: " + response.status,
+        };
+    }
+    const result = {};
+    if (username != null)
+        result["userId"] = username;
+    if (telegramChatId != null)
+        result["telegramChatId"] = telegramChatId;
+    return result;
+}

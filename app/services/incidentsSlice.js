@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import config from '../config';
 import { ApiRequestStatus } from './slicesBase';
-import { removeDuplicates } from '../utils';
 
 /*
 Single incident from API:
@@ -31,6 +30,9 @@ export const incidentsSlice = createSlice({
         },
         incidentsRequested: (state) => {
             state.apiRequestStatus = ApiRequestStatus.InProgress;
+        },
+        incidentStatusUpdated: (state, {payload}) => {
+            updateIncident(state, payload);
         }
     }
 });
@@ -41,23 +43,28 @@ function buildInitialState(config) {
         items: {}
     };
     for (let srvName of config.serviceNames) {
-        incidents.items[srvName] = [];
+        incidents.items[srvName] = {};
     }
     return incidents;
 }
 
 function addNewIncidentsToState(state, incidents) {
     for (let incident of incidents) {
-        state.items[incident.serviceName].push(incident);
+        state.items[incident.serviceName][incident.incidentId] = incident;
     }
-    Object.keys(state.items).forEach((key) => {
-        state.items[key] = removeDuplicates(state.items[key], (a, b) => {
-            const timestampA = Date.parse(a.incidentStartTime);
-            const timestampB = Date.parse(b.incidentStartTime);
-            return timestampA - timestampB;
-        });
-    });
 }
 
-export const { incidentsRequested, incidentsFetched } = incidentsSlice.actions;
+function updateIncident(state, {serviceName, incidentId, newStatus}) {
+    if (state.items[serviceName][incidentId] === undefined) {
+        console.error(`Cannot update incident ${incidentId}, not found in state`);
+        return;
+    }
+    const updatedIncident = {
+        ...state.items[serviceName][incidentId],
+        incidentStatus: newStatus,
+    };
+    state.items[serviceName][incidentId] = updatedIncident;
+}
+
+export const { incidentsRequested, incidentsFetched, incidentStatusUpdated } = incidentsSlice.actions;
 export default incidentsSlice.reducer;

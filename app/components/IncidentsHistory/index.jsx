@@ -22,13 +22,13 @@ export default function IncidentsHistory({serviceName, className}) {
         );
     }
 
-    const incidents = prepareIncidentDtos(incidentsSlice.items[serviceNameToServiceId(serviceName)])
+    const incidents = prepareIncidentDtos(incidentsSlice, serviceNameToServiceId(serviceName))
 
     return (
         <div className={className + ' ' + styles.incidentsHistory}>
             <Heading2>История инцидентов</Heading2>
             {(incidents
-                ? <>{incidents.toReversed().map(item => <IncidentCard key={item.incidentId} incident={item}/>)}</>
+                ? <>{incidents.map(item => <IncidentCard key={item.incidentId} incident={item}/>)}</>
                 : <p>Loading...</p>
             )}
         </div>
@@ -39,8 +39,16 @@ function serviceNameToServiceId(serviceName) {
     return config.serviceNames[config.services.indexOf(serviceName)];
 }
 
-function prepareIncidentDtos(incidentsFromStore) {
-    return incidentsFromStore.map(
-        incident => new IncidentInfo(incident)
-    );
+function prepareIncidentDtos(incidentsSlice, serviceName) {
+    const incidents = [];
+    Object.keys(incidentsSlice.items[serviceName]).forEach(incidentId => {
+        incidents.push(new IncidentInfo(incidentsSlice.items[serviceName][incidentId]));
+    });
+    incidents.sort((a, b) => {
+        const timestampA = a.dateTime.valueOf();
+        const timestampB = b.dateTime.valueOf();
+        return timestampB - timestampA;  // Using reverse order
+    });
+
+    return incidents;
 }
