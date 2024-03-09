@@ -1,3 +1,5 @@
+import config from "../config";
+
 export const ServiceStatus = {
     Up: 'Up',
     Problems: 'Problems',
@@ -21,4 +23,8 @@ export default class ServiceInfo {
         const lastIncident = obj.lastIncident;
         return new ServiceInfo(obj.name, obj.sli, status, lastIncident);
     }
+}
+
+export function serviceNameToServiceId(serviceName) {
+    return config.serviceNames[config.services.indexOf(serviceName)];
 }

@@ -86,6 +86,7 @@ export async function retrieveSli(serviceName, timeFrame) {
         if (!response.ok) {
             const result = {
                 serviceName,
+                frameSize: timeFrame,
                 error: `Failed to retrieve sli of ${serviceName}, status_code=${response.status_code}`
             }
             resolve(result);
@@ -98,6 +99,7 @@ export async function retrieveSli(serviceName, timeFrame) {
         } catch (e) {
             const result = {
                 serviceName,
+                frameSize: timeFrame,
                 error: "Unexpected error during parsing sli response body: " + e
             };
             resolve(result);
@@ -105,6 +107,7 @@ export async function retrieveSli(serviceName, timeFrame) {
         }
 
         rspJson.serviceName = serviceName;
+        rspJson.frameSize = timeFrame;
         resolve(rspJson);
     });
 }

@@ -9,6 +9,7 @@ import SettingsIcon512 from "../../svg/SettingsIcon512.jsx";
 import NotificationsSettings from "../Notifications/NotificationsSettings.jsx";
 import SliChart from "../../components/SliChart/index.jsx";
 import SliChartIcon24 from "../../svg/SliChartIcon24.jsx";
+import { serviceNameToServiceId } from "../../services/Service.js";
 
 export default function ServiceScreen({service, onReturn}) {
     const styles = useStyles();
@@ -17,7 +18,7 @@ export default function ServiceScreen({service, onReturn}) {
     const views = [
         {component: <IncidentsHistory serviceName={service.name} />, icon: <IncidentIcon512 key={0}/>},
         {component: <NotificationsSettings serviceName={service.name}/>, icon: <SettingsIcon512 key={1}/>},
-        {component: <SliChart serviceName={service.name}/>, icon: <SliChartIcon24 key={2}/>}
+        {component: <SliChart serviceName={serviceNameToServiceId(service.name)}/>, icon: <SliChartIcon24 key={2}/>}
     ];
 
     return (

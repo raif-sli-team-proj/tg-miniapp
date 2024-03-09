@@ -6,9 +6,9 @@ import useStyles from "./style.js";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiRequestStatus } from "../../services/slicesBase.js";
 import { incidentsFetched, incidentsRequested } from "../../services/incidentsSlice.js";
-import config from "../../config.js";
 import IncidentInfo from "../../services/Incident.js";
 import IncidentCard from "./IncidentCard.jsx";
+import { serviceNameToServiceId } from "../../services/Service.js";
 
 export default function IncidentsHistory({serviceName, className}) {
     const incidentsSlice = useSelector(state => state.incidents);
@@ -33,10 +33,6 @@ export default function IncidentsHistory({serviceName, className}) {
             )}
         </div>
     );
-}
-
-function serviceNameToServiceId(serviceName) {
-    return config.serviceNames[config.services.indexOf(serviceName)];
 }
 
 function prepareIncidentDtos(incidentsSlice, serviceName) {
