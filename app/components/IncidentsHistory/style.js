@@ -31,6 +31,7 @@ const useStyles = createUseStyles((theme) => ({
                 borderRadius: "10px",
                 boxShadow: "none",
                 padding: "1%",
+                minWidth: "100px",
             },
             "& >button": {
                 backgroundColor: "transparent",
