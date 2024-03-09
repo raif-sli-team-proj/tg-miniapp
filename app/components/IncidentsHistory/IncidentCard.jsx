@@ -3,9 +3,9 @@ import ShortText from "../ShortText/index.jsx";
 import { Heading2 } from "../Headings/index.jsx";
 import useStyles from "./style.js";
 import { useDispatch, useSelector } from "react-redux";
-import { commentsFetched, commentsRequested, getAvailableComments, getRequestStatus } from "../../services/commentsSlice.js";
+import { adminCheckResult, commentsFetched, commentsRequested, getAvailableComments, getRequestStatus, isAdminCheckStarted } from "../../services/commentsSlice.js";
 import { ApiRequestStatus } from "../../services/slicesBase.js";
-import { addNewComment, retrieveComments } from "../../services/api.js";
+import { addNewComment, checkIsAdmin, retrieveComments } from "../../services/api.js";
 import SendIcon from "../../svg/SendIcon.jsx";
 import { getCurrentUsername } from "../../services/TelegramContext.js";
 import { IncidentStatusNames } from "../../services/Incident.js";
@@ -31,6 +31,13 @@ export default function IncidentCard({incident}) {
         }
     });
 
+    if (needCheckAdminAgain(commentsSlice)) {
+        dispatch(isAdminCheckStarted());
+        checkIsAdmin(getCurrentUsername()).then(
+            result => dispatch(adminCheckResult(result))
+        );
+    }
+
     const doAddNewComment = (text, newIncidentStatus) => {
         const username = getCurrentUsername();
         addNewComment(username, text, incident.incidentId, newIncidentStatus).then(
@@ -46,7 +53,7 @@ export default function IncidentCard({incident}) {
             }
         );
     };
-
+    const canAddComments = commentsSlice.admin.result != null && !!commentsSlice.admin.result;
     let comments = [];
     if (isExpanded) {
         comments = getAvailableComments(commentsSlice, incident.serviceId, incident.incidentId);
@@ -59,8 +66,8 @@ export default function IncidentCard({incident}) {
             <ShortText>{"Статус: " + incident.statusName}</ShortText>
             <ShortText>{"Дата: " + incident.dateTime.toLocaleDateString() + " " + incident.dateTime.toLocaleTimeString()}</ShortText>
             {comments.map(item => <div className="comment-row" key={item.id}><Comment comment={item}/></div>)}
-            {isExpanded && <SelectNewStatus incidentId={incident.incidentId} />}
-            {isExpanded && <CommentInput incidentId={incident.incidentId} doAddNewComment={doAddNewComment}/>}
+            {isExpanded && canAddComments && <SelectNewStatus incidentId={incident.incidentId} />}
+            {isExpanded && canAddComments && <CommentInput incidentId={incident.incidentId} doAddNewComment={doAddNewComment}/>}
         </div>
     );
 }
@@ -103,4 +110,16 @@ function SelectNewStatus({incidentId}) {
 
 function getSelectId(incidentId) {
     return `select-new-status-${incidentId}`;
+}
+
+function needCheckAdminAgain(commentsSlice) {
+    if (commentsSlice.admin.checking)
+        return false;
+    if (commentsSlice.admin.result != null)
+        return false;
+    if (commentsSlice.admin.error == null)
+        return true;
+    if (commentsSlice.admin.error.time + 5000 < new Date().valueOf())
+        return true;
+    return false;
 }

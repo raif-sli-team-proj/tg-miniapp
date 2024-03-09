@@ -13,7 +13,23 @@ export const commentsSlice = createSlice({
         },
         commentsRequested: (state, {payload}) => {
             onCommentsRequested(state, payload.serviceId, payload.incidentId)
-        }
+        },
+        isAdminCheckStarted: (state) => {
+            state.admin.checking = true;
+            state.admin.error = null;
+        },
+        adminCheckResult: (state, {payload}) => {
+            state.admin.checking = false;
+            if (payload.error) {
+                state.admin["error"] = {
+                    time: new Date().valueOf(),
+                    msg: payload.error,
+                };
+                return;
+            }
+            state.admin.error = null;
+            state.admin.result = payload.result;
+        },
     }
 });
 
@@ -34,7 +50,12 @@ export function getAvailableComments(state, serviceId, incidentId) {
 
 function buildInitialState(config) {
     let comments = {
-        items: {}  // keys are services names
+        items: {},  // keys are services names
+        admin: {
+            checking: false,
+            result: null,
+            error: null,
+        }
     };
     for (let srvName of config.serviceNames) {
         comments.items[srvName] = {};  // keys are incidents' ids
@@ -73,5 +94,5 @@ function addNewCommentsToState(state, commentsDto, serviceId, incidentId) {
     };
 }
 
-export const { commentsRequested, commentsFetched } = commentsSlice.actions;
+export const { commentsRequested, commentsFetched, isAdminCheckStarted, adminCheckResult } = commentsSlice.actions;
 export default commentsSlice.reducer;

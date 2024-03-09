@@ -239,3 +239,17 @@ export async function subscribeToNotifications({username, telegramChatId}) {
         result["telegramChatId"] = telegramChatId;
     return result;
 }
+
+export async function checkIsAdmin(username) {
+    const request_url = config.api_gateway_url_base + `/api/v1/admin/check/${username}`;
+    const response = await fetch(request_url);
+    if (!response.ok) {
+        return {
+            result: null,
+            error: "Failed to check for my admin permissions, status_code=" + response.status,
+        };
+    }
+    return {
+        result: await response.json(),
+    };
+}
