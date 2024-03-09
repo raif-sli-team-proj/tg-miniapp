@@ -70,7 +70,7 @@ const useStyles = createUseStyles((theme) => ({
         "@media (min-height: 0px)": {
             "& .comment-input": {
                 "& >input": {
-                    fontSize: "14px",
+                    fontSize: "12px",
 
                 },
                 "& >button": {
@@ -85,7 +85,7 @@ const useStyles = createUseStyles((theme) => ({
         "@media (min-height: 670px)": {
             "& .comment-input": {
                 "& >input": {
-                    fontSize: "22px",
+                    fontSize: "18px",
                 },
                 "& >button": {
                     flex: "0 0 50px",
@@ -99,7 +99,7 @@ const useStyles = createUseStyles((theme) => ({
         "@media (min-height: 1000px)": {
             "& .comment-input": {
                 "& >input": {
-                    fontSize: "28px",
+                    fontSize: "24px",
                 },
                 "& >button": {
                     flex: "0 0 62px",
