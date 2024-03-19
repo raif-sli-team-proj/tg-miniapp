@@ -5,10 +5,13 @@ import { checkSubscribed, subscribeToNotifications, unsubscribeToNotifications }
 import { getCurrentChatId, getCurrentUserId, getCurrentUsername } from "../../services/TelegramContext";
 import { hasRequestInProgress, isChatIdSubscribed, notificationSettingsRetreiveRequested, notificationSettingsRetreived, notificationSettingsUpdateRequested, notificationSettingsUpdated } from "../../services/notificationsSettingsSlice";
 import Loader from "../../components/Loader";
+import ShortText from "../../components/ShortText";
+import useStyle from "./style";
 
 export default function NotificationsSettings({}) {
     const state = useSelector(state => state.notificationSettings);
     const dispatch = useDispatch();
+    const style = useStyle();
     const openedFromGroupChat = getCurrentChatId() != null;
 
     if (hasRequestInProgress(state)) {
@@ -34,24 +37,26 @@ export default function NotificationsSettings({}) {
                 <Heading2>Личные сообщения</Heading2>
                 <label>
                     <input
+                        className={style.Checkbox}
                         type="checkbox"
                         checked={isChatIdSubscribed(state, getCurrentUserId())}
                         name="enable-personal-notification"
                         onChange={(e) => submitForm(e.target.checked, getCurrentUserId(), dispatch)}
                     />
-                    Оповещать через личные сообщения
+                    <ShortText>Оповещать через личные сообщения</ShortText>
                 </label>
             </form>
             {openedFromGroupChat && <form>
                 <Heading2>Групповой чат</Heading2>
                 <label>
                     <input
+                        className={style.Checkbox}
                         type="checkbox"
                         checked={isChatIdSubscribed(state, getCurrentChatId())}
                         name="enable-group-notification"
                         onChange={(e) => submitForm(e.target.checked, getCurrentChatId(), dispatch)}
                     />
-                    {`Оповещать в данном групповом чате.`}
+                    <ShortText>Оповещать в данном групповом чате</ShortText>
                 </label>
             </form>}
         </div>
