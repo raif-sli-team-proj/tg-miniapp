@@ -1,43 +1,55 @@
 import React from "react";
 import { Heading1, Heading2 } from "../../components/Headings";
-import { useSelector } from "react-redux";
-import { subscribeToNotifications } from "../../services/api";
-import { getCurrentChatId, getCurrentUsername } from "../../services/TelegramContext";
+import { useDispatch, useSelector } from "react-redux";
+import { checkSubscribed, subscribeToNotifications, unsubscribeToNotifications } from "../../services/api";
+import { getCurrentChatId, getCurrentUserId, getCurrentUsername } from "../../services/TelegramContext";
+import { hasRequestInProgress, isChatIdSubscribed, notificationSettingsRetreiveRequested, notificationSettingsRetreived, notificationSettingsUpdateRequested, notificationSettingsUpdated } from "../../services/notificationsSettingsSlice";
+import Loader from "../../components/Loader";
 
 export default function NotificationsSettings({}) {
-    useSelector(state => state.notificationSettings)
-    const settings = {
-        personal: {
-            enabled: true
-        },
-        group: {
-            enabled: true
-        }
-    };
+    const state = useSelector(state => state.notificationSettings);
+    const dispatch = useDispatch();
     const openedFromGroupChat = getCurrentChatId() != null;
+
+    if (hasRequestInProgress(state)) {
+        return Loader();
+    }
+
+    if (isChatIdSubscribed(state, getCurrentUserId()) == null) {
+        dispatch(notificationSettingsRetreiveRequested());
+        checkSubscribed(getCurrentUserId()).then(payload => dispatch(notificationSettingsRetreived(payload)));
+        return Loader();
+    }
+
+    if (openedFromGroupChat && isChatIdSubscribed(state, getCurrentChatId()) == null) {
+        dispatch(notificationSettingsRetreiveRequested());
+        checkSubscribed(getCurrentChatId()).then(payload => dispatch(notificationSettingsRetreived(payload)));
+        return Loader();
+    }
+
     return (
         <div>
             <Heading1>Настройки оповещений</Heading1>
-            <form id="personal-settings">
+            <form>
                 <Heading2>Личные сообщения</Heading2>
                 <label>
                     <input
                         type="checkbox"
-                        value={settings.personal.enabled}
+                        checked={isChatIdSubscribed(state, getCurrentUserId())}
                         name="enable-personal-notification"
-                        onInput={() => submitForm("personal-settings")}
+                        onChange={(e) => submitForm(e.target.checked, getCurrentUserId(), dispatch)}
                     />
                     Оповещать через личные сообщения
                 </label>
             </form>
-            {openedFromGroupChat && <form id="group-settings">
+            {openedFromGroupChat && <form>
                 <Heading2>Групповой чат</Heading2>
                 <label>
                     <input
                         type="checkbox"
-                        value={settings.group.enabled}
+                        checked={isChatIdSubscribed(state, getCurrentChatId())}
                         name="enable-group-notification"
-                        onInput={() => submitForm("group-settings")}
+                        onChange={(e) => submitForm(e.target.checked, getCurrentChatId(), dispatch)}
                     />
                     {`Оповещать в данном групповом чате.`}
                 </label>
@@ -46,23 +58,14 @@ export default function NotificationsSettings({}) {
     );
 }
 
-function getFormDataAsJson(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.getElementsByTagName("input");
-    const res = {};
-    for (var input of inputs) {
-        res[input.name] = (input.value === "true");
-    }
-    return res;
-}
-
-function submitForm(formId) {
-    const formData = getFormDataAsJson(formId);
-    console.log(formData);
-    const notificationSettings = {};
-    if (formData["enable-personal-notificaion"])
-        notificationSettings["userId"] = getCurrentUsername();
-    if (formData["enable-group-notification"])
-        notificationSettings["telegramChatId"] = getCurrentChatId();
-    subscribeToNotifications(notificationSettings);
+function submitForm(subscribe, chatId, dispatch) {
+    dispatch(notificationSettingsUpdateRequested());
+    let result = null;
+    if (subscribe)
+        result = subscribeToNotifications(chatId)
+    else
+        result = unsubscribeToNotifications(chatId);
+    result.then(payload => {
+        dispatch(notificationSettingsUpdated(payload));
+    });
 }

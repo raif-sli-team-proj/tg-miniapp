@@ -11,7 +11,10 @@ export const notificationsSettingsSlice = createSlice({
             if (!checkError(payload, state.retrieve)) {
                 state.error = null;
                 state.lastErrorTime = null;
-                state.settings = payload.settings;
+                state.settings = {
+                    ...state.settings,
+                    ...payload,
+                }
             }
         },
         notificationSettingsRetreiveRequested: (state) => {
@@ -25,7 +28,10 @@ export const notificationsSettingsSlice = createSlice({
             if (!checkError(payload, state.update)) {
                 state.error = null;
                 state.lastErrorTime = null;
-                state.settings = payload.settings;
+                state.settings = {
+                    ...state.settings,
+                    ...payload
+                };
             }
         }
     }
@@ -50,11 +56,19 @@ function buildInitialState() {
 
 function checkError(payload, substate) {
     if (payload.error != null) {
-        substate.error = error;
+        substate.error = payload.error;
         substate.lastErrorTime = new Date();
         return true;
     }
     return false;
+}
+
+export function hasRequestInProgress(state) {
+    return state.retrieve.apiRequestStatus == ApiRequestStatus.InProgress || state.update.apiRequestStatus == ApiRequestStatus.InProgress;
+}
+
+export function isChatIdSubscribed(state, chatId) {
+    return state.settings[chatId] ?? false;
 }
 
 export const {

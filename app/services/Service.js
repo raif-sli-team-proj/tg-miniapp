@@ -1,9 +1,9 @@
 import config from "../config";
 
 export const ServiceStatus = {
-    Up: 'Up',
-    Problems: 'Problems',
-    Down: 'Down',
+    Up: 'ON',
+    Problems: 'Degraded',
+    Down: 'OFF',
 };
 
 export default class ServiceInfo {
@@ -19,7 +19,7 @@ export default class ServiceInfo {
     };
 
     static fromJson(obj) {
-        const status = (obj.status && obj.status in ServiceStatus) ? obj.status : ServiceStatus.Down;
+        const status = obj.status ?? ServiceStatus.Down;
         const lastIncident = obj.lastIncident;
         return new ServiceInfo(obj.name, obj.sli, status, lastIncident);
     }

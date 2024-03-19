@@ -66,9 +66,9 @@ export async function retrieveServicesStatuses(services) {
             const srv = {
                 name: serviceStatus.serviceName,
                 sli: serviceStatus.sli,
-                status: ServiceStatus.Problems,
+                status: serviceStatus.currentStatus?.status ?? ServiceStatus.Problems,
                 lastIncident: {
-                    date: "2024-01-01T013:00:00.00+00:00",
+                    date: serviceStatus.currentStatus?.eventDate ?? new Date().toUTCString(),
                     description: "",
                     status: "FIXED"
                 }
@@ -209,15 +209,11 @@ export async function addNewComment(userName, text, incidentId, newIncidentStatu
 }
 
 // username and telegramChatId
-export async function subscribeToNotifications({username, telegramChatId}) {
+export async function subscribeToNotifications(chatId) {
     const request_url = config.api_gateway_url_base + '/api/v1/subscription';
-    const requestBody = {};
-    if (username != null) {
-        requestBody["userId"] = username;
-    }
-    if (telegramChatId != null) {
-        requestBody["telegramChatId"] = telegramChatId;
-    }
+    const requestBody = {
+        "telegramChatId": chatId
+    };
 
     const response = await fetch(request_url, {
         method: "POST",
@@ -232,12 +228,47 @@ export async function subscribeToNotifications({username, telegramChatId}) {
             error: "Subscribe failed. HTTP status code: " + response.status,
         };
     }
-    const result = {};
-    if (username != null)
-        result["userId"] = username;
-    if (telegramChatId != null)
-        result["telegramChatId"] = telegramChatId;
-    return result;
+    return {
+        [chatId]: true
+    };
+}
+
+export async function unsubscribeToNotifications(chatId) {
+    const request_url = config.api_gateway_url_base + '/api/v1/subscription';
+    const requestBody = {
+        "telegramChatId": chatId
+    };
+
+    const response = await fetch(request_url, {
+        method: "DELETE",
+        body: JSON.stringify(requestBody),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        console.error("Failed to unsubscribe");
+        return {
+            error: "Unsubscribe failed. HTTP status code: " + response.status,
+        };
+    }
+    return {
+        [chatId]: false
+    };
+}
+
+export async function checkSubscribed(chatId) {
+    const request_url = config.api_gateway_url_base + `/api/v1/subscription/${chatId}`;
+    const response = await fetch(request_url);
+    if (!response.ok) {
+        console.error(`Failed to check is chat ${chatId} subscribed for notifications`);
+        return {
+            error: "Check subscription failed. HTTP status code: " + response.status,
+        };
+    }
+    return {
+        [chatId]: await response.json(),
+    };
 }
 
 export async function checkIsAdmin(username) {

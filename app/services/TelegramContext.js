@@ -6,7 +6,13 @@ export function getCurrentUsername() {
 
 export function getCurrentChatId() {
     if (window.Telegram == null)
-        return "123";
+        return "-123";
 
     return window.Telegram.WebApp.initDataUnsafe.start_param ?? null;
+}
+
+export function getCurrentUserId() {
+    if (window.Telegram == null)
+        return "123";
+    return window.Telegram.WebApp.initDataUnsafe.user.id;
 }
