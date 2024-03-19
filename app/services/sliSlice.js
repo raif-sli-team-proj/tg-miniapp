@@ -3,9 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import config from '../config';
 import { ApiRequestStatus } from './slicesBase';
 
-export const TimeFrames = ["10m", "1h", "1d", "1w"];
+export const TimeFrames = ["1h", "1d", "1w"];
 export const TimeFrameTranslations = {
-    "10m": "10м",
     "1h": "1ч",
     "1d": "1д",
     "1w": "1н",
@@ -24,7 +23,7 @@ export const sliSlice = createSlice({
                 return;
             }
             state.items[serviceName][frameSize].error = null;
-            state.items[serviceName][frameSize]["metrics"] = payload.metrics;
+            saveSliMetrics(state, serviceName, frameSize, payload.metrics);
         },
         sliRequested: (state, {payload}) => {
             const {serviceName, frameSize} = payload;
@@ -50,6 +49,18 @@ function buildInitialState(config) {
         sli.selectedTimeFrame = TimeFrames[0];
     }
     return sli;
+}
+
+function saveSliMetrics(state, serviceName, frameSize, metrics) {
+    metrics.sort((a, b) => {
+        const aTimestamp = new Date(a.dateTime).valueOf();
+        const bTimestamp = new Date(b.dateTime).valueOf();
+        return aTimestamp - bTimestamp;
+    });
+    if (metrics.length > 50)
+        metrics = metrics.slice(-50);
+    state.items[serviceName][frameSize]["metrics"] = metrics;
+
 }
 
 export function getRequestStatus(state, serviceName, timeFrame) {

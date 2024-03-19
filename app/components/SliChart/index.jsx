@@ -30,6 +30,7 @@ Legend
 );
 
 export default function SliChart({serviceName}) {
+    console.log("Rendering SliChart for " + serviceName);
     const sli = useSelector((state) => state.sli);  // sli is {apiRequestStatus, items}
     const dispatch = useDispatch();
     const styles = useStyles();
