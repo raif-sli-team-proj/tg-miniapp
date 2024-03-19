@@ -68,7 +68,7 @@ export function hasRequestInProgress(state) {
 }
 
 export function isChatIdSubscribed(state, chatId) {
-    return state.settings[chatId] ?? false;
+    return state.settings[chatId];
 }
 
 export const {
