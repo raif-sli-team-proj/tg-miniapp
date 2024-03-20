@@ -88,6 +88,11 @@ function onCommentsFetched(state, {serviceId, incidentId, error, comments}) {
 }
 
 function addNewCommentsToState(state, commentsDto, serviceId, incidentId) {
+    for (let item of commentsDto) {
+        if (!item.creationDate.endsWith('Z')) {
+            item.creationDate += 'Z';  // Required to parse dates in UTC timezone
+        }
+    }
     const subState = state.items[serviceId][incidentId];
     state.items[serviceId][incidentId].comments = {
         data: removeDuplicates([...subState.comments.data, ...commentsDto], (a, b) => { return a.id - b.id; })

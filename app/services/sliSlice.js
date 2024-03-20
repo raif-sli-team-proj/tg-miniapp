@@ -52,6 +52,11 @@ function buildInitialState(config) {
 }
 
 function saveSliMetrics(state, serviceName, frameSize, metrics) {
+    for (let m of metrics) {
+        if (!m.dateTime.endsWith('Z')) {
+            m.dateTime += 'Z';  // Required to parse date in UTC timezone
+        }
+    }
     metrics.sort((a, b) => {
         const aTimestamp = new Date(a.dateTime).valueOf();
         const bTimestamp = new Date(b.dateTime).valueOf();

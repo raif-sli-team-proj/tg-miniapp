@@ -50,6 +50,12 @@ function buildInitialState(config) {
 
 function addNewIncidentsToState(state, incidents) {
     for (let incident of incidents) {
+        if (!incident.incidentStartTime.endsWith('Z')) {
+            incident.incidentStartTime += 'Z'; // Required to parse Date in UTC timezone
+        }
+        if (incident.incidentEndTime && !incident.incidentEndTime.endsWith('Z')) {
+            incident.incidentEndTime += 'Z'; // Required to parse Date in UTC timezone
+        }
         state.items[incident.serviceName][incident.incidentId] = incident;
     }
 }
