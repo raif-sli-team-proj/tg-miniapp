@@ -65,20 +65,24 @@ export default function IncidentCard({incident}) {
             {incident.duration && <ShortText>{incident.duration + " мин"}</ShortText> }
             <ShortText>{"Статус: " + incident.statusName}</ShortText>
             <ShortText>{"Дата: " + incident.dateTime.toLocaleDateString() + " " + incident.dateTime.toLocaleTimeString()}</ShortText>
-            {comments.map(item => <div className="comment-row" key={item.id}><Comment comment={item}/></div>)}
+            {comments.map(item => <Comment key={item.id} comment={item} styles={styles}/>)}
             {isExpanded && canAddComments && <SelectNewStatus incidentId={incident.incidentId} />}
             {isExpanded && canAddComments && <CommentInput incidentId={incident.incidentId} doAddNewComment={doAddNewComment}/>}
         </div>
     );
 }
 
-function Comment({comment}) {
+function Comment({comment, styles, ...props}) {
     const statusName = IncidentStatusNames[comment.newIncidentStatus];
+    const commentDate = new Date(comment.creationDate);
     return (
-        <>
+        <div className={styles.Comment} {...props}>
+            <div className="comment-header">
+                <ShortText className="date-string">{commentDate.toLocaleDateString() + " " + commentDate.toLocaleTimeString()}</ShortText>
+                <ShortText className={`color-${comment.newIncidentStatus}`}>{statusName}</ShortText>
+            </div>
             <ShortText>{comment.contents}</ShortText>
-            <ShortText className={`color-${comment.newIncidentStatus}`}>{statusName}</ShortText>
-        </>
+        </div>
     )
 }
 

@@ -40,21 +40,6 @@ const useStyles = createUseStyles((theme) => ({
                 padding: 0,
             },
         },
-        "& .comment-row": {
-            marginTop: "0.2em",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            "& .color-RESOLVED": {
-                color: "rgb(94, 209, 182)",
-            },
-            "& .color-REPORTED": {
-                color: "rgb(252, 150, 150)",
-            },
-            "& .color-INVESTIGATING": {
-                color: "rgb(252, 182, 100)",
-            },
-        },
         "& .select-new-status": {
             width: "10em",
             height: "1.5em",
@@ -127,6 +112,30 @@ const useStyles = createUseStyles((theme) => ({
             },
         },
     },
+    Comment: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        width: "100%",
+        "& .date-string": {
+            fontWeight: "650",
+        },
+        "& .comment-header": {
+            marginTop: "0.2em",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            "& .color-RESOLVED": {
+                color: "rgb(94, 209, 182)",
+            },
+            "& .color-REPORTED": {
+                color: "rgb(252, 150, 150)",
+            },
+            "& .color-INVESTIGATING": {
+                color: "rgb(252, 182, 100)",
+            },
+        }
+    }
 }));
 
 export default useStyles;
