@@ -14,35 +14,35 @@ const useStyle = createUseStyles({
             }
         },
 
-        "@media (min-height: 0px)": {
+        "@media (max-width: 399px)": {
             minHeight: "50px",
             "& .raif-icon, .go-back-btn": {
-                height: "46px",
+                width: "40px",
             },
         },
 
-        "@media (min-height: 670px)": {
+        "@media (min-width: 400px) and (max-width: 499px)": {
             minHeight: "65px",
             "& .raif-icon, .go-back-btn": {
                 height: "60px",
             },
         },
 
-        "@media (min-height: 1000px)": {
+        "@media (min-width: 500px) and (max-width: 649px)": {
+            minHeight: "72px",
+            "& .raif-icon, .go-back-btn": {
+                height: "68px",
+            }
+        },
+
+        "@media (min-width: 650px) and (max-width: 999px)": {
             minHeight: "90px",
             "& .raif-icon, .go-back-btn": {
                 height: "82px",
             },
         },
 
-        "@media (min-height: 1500px)": {
-            minHeight: "120px",
-            "& .raif-icon, .go-back-btn": {
-                height: "110px",
-            },
-        },
-
-        "@media (min-height: 2100px)": {
+        "@media (min-width: 1000px)": {
             minHeight: "150px",
             "& .raif-icon, .go-back-btn": {
                 height: "140px",

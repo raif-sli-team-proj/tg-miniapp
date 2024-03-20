@@ -10,44 +10,12 @@ const useStyles = createUseStyles({
             flexDirection: "row",
             justifyContent: "space-between",
             color: "rgb(0, 0, 0, 0.75)",
-            // paddingLeft: "6em",
-        },
-
-        "@media (min-height: 0px)": {
-            "& .xticks": {
-                // paddingLeft: "6em",
-            },
-        },
-
-        "@media (min-height: 670px)": {
-            "& .xticks": {
-                // paddingLeft: "4em",
-            },
-        },
-
-        "@media (min-height: 1000px)": {
-            "& .xticks": {
-            },
-        },
-
-        "@media (min-height: 1500px)": {
-            "& .xticks": {
-                // paddingLeft: "2em",
-            },
-        },
-
-        "@media (min-height: 2100px)": {
-            "& .xticks": {
-            },
         },
     },
     TimeFrameSelector: {
         "display": "flex",
         "flexDirection": "row",
         "flex": "1 0 auto",
-        // borderRadius: "0.5em",
-        // borderLeftStyle: "solid",
-        // borderRightStyle: "solid",
         "& >div": {
             "flex": "1 1 auto",
             display: "flex",
@@ -72,26 +40,27 @@ const useStyles = createUseStyles({
         "& .selected": {
             backgroundColor: "#aaa",
         },
-        "@media (min-height: 0px)": {
+
+        "@media (max-height: 669px)": {
             "& .option": {
                 fontSize: "14px",
             },
         },
 
-        "@media (min-height: 670px)": {
+        "@media (min-height: 670px) and (max-height: 999px)": {
             "& .option": {
                 fontSize: "20px",
             },
         },
 
-        "@media (min-height: 1000px)": {
+        "@media (min-height: 1000px) and (max-height: 1499px)": {
             "& .option": {
                 fontSize: "28px",
                 borderWidth: "2px",
             },
         },
 
-        "@media (min-height: 1500px)": {
+        "@media (min-height: 1500px) and (max-height: 2199px)": {
             "& .option": {
                 fontSize: "38px",
             },

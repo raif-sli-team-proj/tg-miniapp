@@ -2,6 +2,10 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
     ServiceQuickInfoCard: {
+        padding: "1.5%",
+        borderRadius: "10px",
+        // border: "solid #ccc 1px",
+        boxShadow: "0 0 5px 3px #ccc",
         "& .sli": {
             "& span": {
                 display: "inline-block",

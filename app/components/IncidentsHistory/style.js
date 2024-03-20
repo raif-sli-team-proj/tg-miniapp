@@ -30,7 +30,7 @@ const useStyles = createUseStyles((theme) => ({
                 flex: "1 0 auto",
                 borderRadius: "10px",
                 boxShadow: "none",
-                padding: "1%",
+                padding: "0 1%",
                 minWidth: "100px",
             },
             "& >button": {
@@ -67,7 +67,8 @@ const useStyles = createUseStyles((theme) => ({
             }
         },
 
-        "@media (min-height: 0px)": {
+
+        "@media (max-width: 399px)": {
             "& .comment-input": {
                 "& >input": {
                     fontSize: "12px",
@@ -82,52 +83,40 @@ const useStyles = createUseStyles((theme) => ({
             },
         },
 
-        "@media (min-height: 670px)": {
+        "@media (min-width: 400px) and (max-width: 649px)": {
             "& .comment-input": {
                 "& >input": {
                     fontSize: "18px",
+
                 },
                 "& >button": {
-                    flex: "0 0 50px",
+                    flex: "0 0 55px",
                 },
             },
             "& .select-new-status": {
-                fontSize: "22px",
+                fontSize: "20px",
             },
         },
 
-        "@media (min-height: 1000px)": {
+        "@media (min-width: 650px) and (max-width: 999px)": {
             "& .comment-input": {
                 "& >input": {
                     fontSize: "24px",
+
                 },
                 "& >button": {
-                    flex: "0 0 62px",
+                    flex: "0 0 80px",
                 },
             },
             "& .select-new-status": {
                 fontSize: "28px",
             },
         },
-
-        "@media (min-height: 1500px)": {
+        "@media (min-width: 1000px)": {
             "& .comment-input": {
                 "& >input": {
-                    fontSize: "32px",
-                },
-                "& >button": {
-                    flex: "0 0 78px",
-                },
-            },
-            "& .select-new-status": {
-                fontSize: "32px",
-            },
-        },
+                    fontSize: "38px",
 
-        "@media (min-height: 2100px)": {
-            "& .comment-input": {
-                "& >input": {
-                    fontSize: "42px",
                 },
                 "& >button": {
                     flex: "0 0 90px",
