@@ -18,6 +18,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import useStyles from "./style";
 import ShortText from "../ShortText";
+import { Heading2 } from "../Headings";
 
 ChartJS.register(
 CategoryScale,
@@ -54,7 +55,7 @@ export default function SliChart({serviceName}) {
     const sliItems = getAvailableSliMetrics(sli, serviceName, timeFrame);
 
     if (sliItems == null || sliItems.length == 0) {
-        return <div>No data to display</div>
+        return <ShortText>{"Не удалось получить данные об истории изменения SLI"}</ShortText>
     }
 
     const labels = sliItems.map((item) => new Date(item.dateTime));
@@ -74,6 +75,7 @@ export default function SliChart({serviceName}) {
     };
     return (
         <div className={styles.SliChart}>
+            <Heading2 className="text-center">График SLI</Heading2>
             <Line
                 data={data}
                 options={{
@@ -106,6 +108,7 @@ export default function SliChart({serviceName}) {
                 <ShortText>{labels[0].toLocaleString()}</ShortText>
                 <ShortText>{labels[labels.length - 1].toLocaleString()}</ShortText>
             </div>
+            <Heading2 className="text-center">{"Интервал расчета SLI"}</Heading2>
             <TimeFrameSelector className="time-frame-selector"/>
         </div>
     )

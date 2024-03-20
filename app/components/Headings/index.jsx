@@ -10,10 +10,10 @@ export function Heading1({children}) {
     );
 }
 
-export function Heading2({children}) {
+export function Heading2({children, className}) {
     const style = useStyle();
     return (
-        <div className={"no-margin " + style.Heading2} style={style}>
+        <div className={(className ?? "") + " no-margin " + style.Heading2} style={style}>
             {children}
         </div>
     );

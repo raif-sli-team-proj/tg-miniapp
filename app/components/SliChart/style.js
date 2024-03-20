@@ -11,6 +11,9 @@ const useStyles = createUseStyles({
             justifyContent: "space-between",
             color: "rgb(0, 0, 0, 0.75)",
         },
+        "& .text-center": {
+            textAlign: "center",
+        }
     },
     TimeFrameSelector: {
         "display": "flex",
