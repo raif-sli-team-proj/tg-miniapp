@@ -10,7 +10,7 @@ export const statusesSlice = createSlice({
         statusesFetched: (state, {payload}) => {  // payload is array of ServiceInfo
             // FIXME: I do not check whether `payload` contains the complete list of requests services or not.
             for (let srv of payload) {
-                state.items[srv.name] = srv;
+                state.items[srv.serviceName] = srv;
             }
             state.apiRequestStatus = ApiRequestStatus.Done;
         },

@@ -2,7 +2,7 @@ import config from "../config";
 
 export const ServiceStatus = {
     Up: 'ON',
-    Problems: 'Degraded',
+    Problems: 'DEGRADED',
     Down: 'OFF',
 };
 
@@ -19,9 +19,13 @@ export default class ServiceInfo {
     };
 
     static fromJson(obj) {
-        const status = obj.status ?? ServiceStatus.Down;
-        const lastIncident = obj.lastIncident;
-        return new ServiceInfo(obj.name, obj.sli, status, lastIncident);
+        const status = obj.currentStatus?.status ?? ServiceStatus.Down;
+        const lastIncident = {
+            date: obj.currentStatus?.eventDate,
+            description: "",
+            status: ServiceStatus.Down,
+        };
+        return new ServiceInfo(obj.serviceName, obj.sli, status, lastIncident);
     }
 }
 

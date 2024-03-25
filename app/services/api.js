@@ -62,18 +62,7 @@ export async function retrieveServicesStatuses(services) {
             // Array `services` has small chances to become larger than 20 elements, so linear search is fast enough or even faster then anything else here.
             if (undefined === services.find((it) => it === serviceStatus.serviceName))
                 continue;
-
-            const srv = {
-                name: serviceStatus.serviceName,
-                sli: serviceStatus.sli,
-                status: serviceStatus.currentStatus?.status ?? ServiceStatus.Problems,
-                lastIncident: {
-                    date: serviceStatus.currentStatus?.eventDate ?? new Date().toUTCString(),
-                    description: "",
-                    status: "FIXED"
-                }
-            };
-            result.push(srv);
+            result.push(serviceStatus);
         }
         resolve(result);
     });
