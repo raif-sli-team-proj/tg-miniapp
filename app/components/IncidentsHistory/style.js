@@ -42,7 +42,7 @@ const useStyles = createUseStyles((theme) => ({
         },
         "& .select-new-status": {
             width: "10em",
-            height: "1.5em",
+            height: "2em",
             background: "transparent",
             border: "solid 1px",
             borderRadius: ".15em",
