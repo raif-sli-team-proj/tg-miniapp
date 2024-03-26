@@ -62,9 +62,8 @@ export default function IncidentCard({incident}) {
     return (
         <div className={styles.IncidentCard + " text-size-m " + cardShadowClassifier} onClick={() => setIsExpanded(!isExpanded) }>
             <Heading2>{incident.name}</Heading2>
+            <ShortText>{incident.dateTime.toLocaleString()}</ShortText>
             {incident.duration && <ShortText>{incident.duration + " мин"}</ShortText> }
-            <ShortText>{"Статус: " + incident.statusName}</ShortText>
-            <ShortText>{"Дата: " + incident.dateTime.toLocaleString()}</ShortText>
             {comments.map(item => <Comment key={item.id} comment={item} styles={styles}/>)}
             {isExpanded && canAddComments && <SelectNewStatus incidentId={incident.incidentId} />}
             {isExpanded && canAddComments && <CommentInput incidentId={incident.incidentId} doAddNewComment={doAddNewComment}/>}

@@ -24,7 +24,7 @@ export default function ServiceQuickInfoCard({service, onServiceClick, className
                 <Column>
                     <Heading2>{service.name}</Heading2>
                     {service.sli != null && <ShortText className="sli">SLI<span>95</span>: {service.sli}</ShortText>}
-                    {service.lastIncident && <ShortText><span className="no-incidents">{getTextForDaysWithoutIncidents(service)}</span></ShortText>}
+                    {/* {service.lastIncident && <ShortText><span className="no-incidents">{getTextForDaysWithoutIncidents(service)}</span></ShortText>} */}
                 </Column>
                 <ServiceStatusIcon status={service.status}/>
             </Row>

@@ -120,6 +120,7 @@ const useStyles = createUseStyles((theme) => ({
         "& .date-string": {
             fontWeight: "650",
         },
+        borderTop: "1px solid",
         "& .comment-header": {
             marginTop: "0.2em",
             display: "flex",
@@ -134,6 +135,10 @@ const useStyles = createUseStyles((theme) => ({
             "& .color-INVESTIGATING": {
                 color: "rgb(252, 182, 100)",
             },
+        },
+
+        "@media (min-width: 650px)": {
+            borderTop: "2px solid",
         }
     }
 }));

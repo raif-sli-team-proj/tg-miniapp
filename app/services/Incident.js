@@ -1,9 +1,9 @@
 import config from "../config";
 
 export const IncidentStatus = {
-    RESOLVED: 'Up',
-    INVESTIGATING: 'Down',
-    REPORTED: 'Down'
+    RESOLVED: 'RESOLVED',
+    INVESTIGATING: 'INVESTIGATING',
+    REPORTED: 'REPORTED'
 };
 
 export const IncidentStatusNames = {
@@ -34,6 +34,11 @@ export default class IncidentInfo {
         const incidentEndTime = incidentDto.incidentEndTime ? new Date(incidentDto.incidentEndTime) : new Date();
         this.duration = Math.round((incidentEndTime - this.dateTime) / 1000 / 60);
         this.statusName = IncidentStatusNames[incidentDto.incidentStatus];
-        this.name = "Сервис недоступен";
+        console.log("HERE: " + this.status);
+        if (this.status == IncidentStatus.RESOLVED) {
+            this.name = "Сервис был недоступен"
+        } else {
+            this.name = "Сервис недоступен";
+        }
     }
 }

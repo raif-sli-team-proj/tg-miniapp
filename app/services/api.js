@@ -256,7 +256,7 @@ export async function checkSubscribed(chatId) {
         };
     }
     return {
-        [chatId]: await response.json(),
+        [chatId]: (await response.json())["isSubscribed"],
     };
 }
 
