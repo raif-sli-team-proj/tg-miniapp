@@ -23,8 +23,7 @@ export default function ServiceQuickInfoCard({service, onServiceClick, className
             <Row className="row">
                 <Column>
                     <Heading2>{service.name}</Heading2>
-                    {service.sli != null && <ShortText className="sli">SLI<span>95</span>: {service.sli}</ShortText>}
-                    {/* {service.lastIncident && <ShortText><span className="no-incidents">{getTextForDaysWithoutIncidents(service)}</span></ShortText>} */}
+                    {service.sli != null && <ShortText className="sli">SLI<span>95</span>: {Math.round(service.sli * 100 * 10000) / 10000}%</ShortText>}
                 </Column>
                 <ServiceStatusIcon status={service.status}/>
             </Row>
